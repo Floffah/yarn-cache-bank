@@ -1,0 +1,62 @@
+{
+    "name": "yarn-cache-bank",
+    "version": "0.0.1",
+    "description": "A command line tool that allows you to create a global bank of yarn's cached dependencies and symlink between them",
+    "main": "dist/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Floffah/yarn-cache-bank.git"
+    },
+    "bin": {
+        "yarn-cache-bank": "dist/cli.js",
+        "ycb": "dist/cli.js"
+    },
+    "files": [
+        "dist",
+        "LICENSE"
+    ],
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "scripts": {
+        "prepack": "yarn tsup --minify"
+    },
+    "directories": {
+        "bin": "dist",
+        "lib": "dist"
+    },
+    "keywords": [
+        "yarn",
+        "cache",
+        "bank",
+        "symlink",
+        "dependencies"
+    ],
+    "author": "Floffah",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Floffah/yarn-cache-bank/issues"
+    },
+    "homepage": "https://github.com/Floffah/yarn-cache-bank#readme",
+    "packageManager": "yarn@3.0.0",
+    "devDependencies": {
+        "@types/jju": "^1.4.2",
+        "@types/node": "^16.4.12",
+        "@typescript-eslint/eslint-plugin": "^4.29.0",
+        "@typescript-eslint/parser": "^4.29.0",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "npm-check-updates": "^11.8.3",
+        "prettier": "^2.3.2",
+        "tsup": "^4.13.1",
+        "typescript": "^4.3.5"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^8.1.0",
+        "draftlog": "^1.0.13",
+        "enquirer": "^2.3.6",
+        "flatted": "^3.2.2",
+        "jju": "^1.4.0"
+    }
+}

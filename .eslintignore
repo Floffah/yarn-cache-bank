@@ -1,0 +1,16 @@
+node_modules
+dist
+types
+assets
+data
+.storybook
+public
+build
+docs
+deps/
+_build/
+.elixir_ls
+assets
+priv
+packages/web/src/lib/api/typegen.ts
+storybook-dist
