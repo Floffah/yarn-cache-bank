@@ -1,9 +1,11 @@
 import Engine from "./Engine";
 import { resolve } from "path";
-import { parse as flattedParse, stringify as flattedStringify } from "flatted";
+import { parse as jjuParse, stringify as jjuStringify } from "jju";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
-export type FlatfileCache = [string, string][];
+export interface FlatfileCache {
+    cache: [string, string][];
+}
 
 export default class FlatfileEngine extends Engine {
     filecache?: Map<string, string>; //yarnPath: cached path (the flatfile engine's one)
@@ -47,7 +49,7 @@ export default class FlatfileEngine extends Engine {
             return {
                 datapath,
                 cachepath,
-                cache: flattedParse(readFileSync(cachepath, "utf-8")),
+                cache: jjuParse(readFileSync(cachepath, "utf-8")),
                 worked: true,
             };
         else {
@@ -63,6 +65,9 @@ export default class FlatfileEngine extends Engine {
     }
 
     getPath(yarnName: string) {
+        if (this.filecache && this.filecache.has(yarnName))
+            return this.filecache.get(yarnName) as string;
+
         const cache = this.getCache(false);
 
         if (existsSync(resolve(cache.datapath, yarnName)))
@@ -75,7 +80,12 @@ export default class FlatfileEngine extends Engine {
 
         if (!cache.worked) this.filecache = new Map();
 
-        this.filecache = new Map(cache.cache);
+        try {
+            if (cache.cache) this.filecache = new Map(cache.cache?.cache);
+            else this.filecache = new Map();
+        } catch {
+            this.filecache = new Map();
+        }
     }
 
     cachePackage(yarnName: string, path: string) {
@@ -83,6 +93,7 @@ export default class FlatfileEngine extends Engine {
         if (!cache.worked) mkdirSync(cache.datapath, { recursive: true });
 
         const pkgcachepath = resolve(cache.datapath, yarnName);
+        this.filecache?.set(yarnName, pkgcachepath);
         if (existsSync(pkgcachepath)) return false;
 
         writeFileSync(pkgcachepath, readFileSync(path));
@@ -94,7 +105,13 @@ export default class FlatfileEngine extends Engine {
 
         const cache = this.getCache(false);
 
-        writeFileSync(cache.cachepath, flattedStringify(this.filecache));
+        writeFileSync(
+            cache.cachepath,
+            jjuStringify(
+                { cache: [...this.filecache.entries()] },
+                { mode: "json" },
+            ),
+        );
         this.filecache = undefined;
     }
 }

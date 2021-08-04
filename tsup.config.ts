@@ -6,4 +6,5 @@ export const tsup: Options = {
     bundle: true,
     entryPoints: ["src/index.ts", "src/cli.ts"],
     dts: true,
+    external: ["*"],
 };
